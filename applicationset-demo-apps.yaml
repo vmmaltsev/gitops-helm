@@ -9,13 +9,16 @@ spec:
         elements:
           - path: helm/api-golang
             namespace: demo-app
+            name: api-golang
           - path: helm/api-node
             namespace: demo-app
+            name: api-node
           - path: helm/client-react
             namespace: demo-app
+            name: client-react
   template:
     metadata:
-      name: '{{path.basename}}'
+      name: '{{name}}'
     spec:
       project: default
       source:

@@ -25,18 +25,6 @@ spec:
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
             - containerPort: {{ .Values.service.port }}
-          readinessProbe:
-            httpGet:
-              path: /health
-              port: {{ .Values.service.port }}
-            initialDelaySeconds: 5
-            periodSeconds: 10
-          livenessProbe:
-            httpGet:
-              path: /health
-              port: {{ .Values.service.port }}
-            initialDelaySeconds: 15
-            periodSeconds: 20
           envFrom:
             - configMapRef:
                 name: api-golang-config

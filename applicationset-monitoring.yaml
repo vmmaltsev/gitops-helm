@@ -10,9 +10,10 @@ spec:
         revision: HEAD
         directories:
           - path: helm/monitoring
+            name: monitoring
   template:
     metadata:
-      name: '{{path.basename}}'
+      name: '{{name}}'
     spec:
       project: default
       source:
