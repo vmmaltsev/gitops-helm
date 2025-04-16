@@ -5,19 +5,25 @@ metadata:
   namespace: argocd
 spec:
   generators:
-    - git:
-        repoURL: https://github.com/vmmaltsev/gitops-helm.git
-        revision: HEAD
-        directories:
-          # monitoring → namespace: monitoring
-          - path: helm/monitoring
-            values:
-              namespace: monitoring
-          # все остальные → namespace: demo-app
-          - path: helm/*
-            exclude: helm/monitoring
-            values:
-              namespace: demo-app
+    - merge:
+        mergeKeys:
+          - path
+        generators:
+          - git:
+              repoURL: https://github.com/vmmaltsev/gitops-helm.git
+              revision: HEAD
+              directories:
+                - path: helm/*
+          - list:
+              elements:
+                - path: helm/monitoring
+                  namespace: monitoring
+                - path: helm/api-golang
+                  namespace: demo-app
+                - path: helm/api-node
+                  namespace: demo-app
+                - path: helm/client-react
+                  namespace: demo-app
   template:
     metadata:
       name: '{{path.basename}}'
@@ -31,7 +37,7 @@ spec:
           skipCrds: true
       destination:
         server: https://kubernetes.default.svc
-        namespace: '{{values.namespace}}'
+        namespace: '{{namespace}}'
       syncPolicy:
         automated:
           prune: true
