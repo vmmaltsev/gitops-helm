@@ -9,7 +9,15 @@ spec:
         repoURL: https://github.com/vmmaltsev/gitops-helm.git
         revision: HEAD
         directories:
+          # monitoring → namespace: monitoring
+          - path: helm/monitoring
+            values:
+              namespace: monitoring
+          # все остальные → namespace: demo-app
           - path: helm/*
+            exclude: helm/monitoring
+            values:
+              namespace: demo-app
   template:
     metadata:
       name: '{{path.basename}}'
@@ -23,7 +31,7 @@ spec:
           skipCrds: true
       destination:
         server: https://kubernetes.default.svc
-        namespace: '{{ if eq path.basename "monitoring" }}monitoring{{ else }}demo-app{{ end }}'
+        namespace: '{{values.namespace}}'
       syncPolicy:
         automated:
           prune: true
