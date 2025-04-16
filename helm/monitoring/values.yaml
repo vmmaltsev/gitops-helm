@@ -1,4 +1,8 @@
 kube-prometheus-stack:
+  prometheusOperator:
+    cleanupCustomResource: false
+    createCustomResource: false
+
   prometheus:
     enabled: true
     ingress:
@@ -13,8 +17,9 @@ kube-prometheus-stack:
 
   grafana:
     enabled: true
-    adminPassword: "ChangeMeStrong123"  # ❗ Замените на безопасный пароль
     defaultDashboardsEnabled: true
+    admin:
+      existingSecret: grafana-admin-secret  # Используем секрет вместо открытого пароля
     ingress:
       enabled: true
       annotations:
@@ -26,7 +31,7 @@ kube-prometheus-stack:
       path: /
       pathType: Prefix
       hosts:
-        - grafana.yourdomain.com  # ❗ Замените на ваш домен
+        - grafana.maltsevtech.com
       tls:
         - secretName: grafana-tls
           hosts:
@@ -34,7 +39,6 @@ kube-prometheus-stack:
     service:
       type: ClusterIP
 
-  # Убедитесь, что вы используете минимум GKE 1.21+ и NGINX Ingress Controller установлен
   kubeApiServer:
     enabled: true
 
