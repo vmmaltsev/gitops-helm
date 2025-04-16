@@ -1,0 +1,33 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: monitoring-app
+  namespace: argocd
+spec:
+  generators:
+    - git:
+        repoURL: https://github.com/vmmaltsev/gitops-helm.git
+        revision: HEAD
+        directories:
+          - path: helm/monitoring
+  template:
+    metadata:
+      name: '{{path.basename}}'
+    spec:
+      project: default
+      source:
+        repoURL: https://github.com/vmmaltsev/gitops-helm.git
+        targetRevision: HEAD
+        path: '{{path}}'
+        helm:
+          skipCrds: true
+      destination:
+        server: https://kubernetes.default.svc
+        namespace: monitoring
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+        syncOptions:
+          - ServerSideApply=false   # 🔧 это ключевой параметр
+          - CreateNamespace=true
