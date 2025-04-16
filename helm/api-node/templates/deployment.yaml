@@ -27,7 +27,7 @@ spec:
             - containerPort: {{ .Values.service.port }}
           readinessProbe:
             httpGet:
-              path: /ping
+              path: /
               port: {{ .Values.service.port }}
             initialDelaySeconds: 10
             periodSeconds: 30
@@ -35,7 +35,7 @@ spec:
             failureThreshold: 3
           livenessProbe:
             httpGet:
-              path: /ping
+              path: /
               port: {{ .Values.service.port }}
             initialDelaySeconds: 20
             periodSeconds: 30
