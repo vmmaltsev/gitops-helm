@@ -1,0 +1,27 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: helm-apps
+  namespace: argocd
+spec:
+  generators:
+    - directory:
+        repoURL: https://github.com/vmmaltsev/gitops-helm.git
+        path: helm
+        recurse: false
+  template:
+    metadata:
+      name: '{{path.basename}}'
+    spec:
+      project: default
+      source:
+        repoURL: https://github.com/vmmaltsev/gitops-helm.git
+        targetRevision: HEAD
+        path: helm/{{path.basename}}
+        helm:
+          skipCrds: true
+      destination:
+        server: https://kubernetes.default.svc
+        namespace: demo-app
+      syncPolicy:
+        automated: {}
