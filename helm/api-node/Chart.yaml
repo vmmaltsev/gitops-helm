@@ -1,5 +1,9 @@
 apiVersion: v2
 name: api-node
-description: Node.js API microservice
+description: Demo Node.js API
 version: 0.1.0
 appVersion: "1.0.0"
+dependencies:
+  - name: common
+    version: 0.1.0
+    repository: file://../common

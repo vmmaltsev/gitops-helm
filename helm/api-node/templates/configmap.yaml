@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: api-node-config
+  labels:
+    app: api-node
+data:
+  NODE_ENV: {{ .Values.env.nodeEnv | default "production" }}
+  LOG_LEVEL: {{ .Values.env.logLevel | default "info" }} 

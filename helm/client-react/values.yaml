@@ -9,14 +9,26 @@ service:
   type: ClusterIP
   port: 8080
 
+resources:
+  requests:
+    cpu: 50m
+    memory: 64Mi
+  limits:
+    cpu: 100m
+    memory: 128Mi
+
 ingress:
   enabled: true
   className: nginx
   annotations:
     nginx.ingress.kubernetes.io/rewrite-target: /
+    kubernetes.io/tls-acme: "true"
   hosts:
     - host: app.maltsevtech.com
       paths:
         - path: /
           pathType: Prefix
-  tls: []
+  tls:
+    - secretName: app-tls-cert
+      hosts:
+        - app.maltsevtech.com
