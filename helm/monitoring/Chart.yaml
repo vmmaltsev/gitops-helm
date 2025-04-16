@@ -1,0 +1,11 @@
+apiVersion: v2  # Используем Helm API v2 (требуется Helm 3+)
+name: monitoring  # Название чарта
+description: Monitoring stack based on kube-prometheus-stack  # Краткое описание
+type: application  # Тип чарта (application/library)
+version: 0.1.0  # Версия самого чарта (semver)
+appVersion: "1.0.0"  # Версия приложения, отображаемая в ArgoCD и UI Helm
+
+dependencies:
+  - name: kube-prometheus-stack
+    version: "70.4.2"  # Совместимая версия зависимого чарта
+    repository: "https://prometheus-community.github.io/helm-charts"  # Источник

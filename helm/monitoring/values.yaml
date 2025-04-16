@@ -1,0 +1,45 @@
+kube-prometheus-stack:
+  prometheus:
+    enabled: true
+    ingress:
+      enabled: false  # В GKE обычно не открывают Prometheus наружу
+    prometheusSpec:
+      serviceMonitorSelectorNilUsesHelmValues: false
+
+  alertmanager:
+    enabled: true
+    ingress:
+      enabled: false
+
+  grafana:
+    enabled: true
+    adminPassword: "ChangeMeStrong123"  # ❗ Замените на безопасный пароль
+    defaultDashboardsEnabled: true
+    ingress:
+      enabled: true
+      annotations:
+        kubernetes.io/ingress.class: "nginx"
+        cert-manager.io/cluster-issuer: "letsencrypt-prod"
+        nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
+        nginx.ingress.kubernetes.io/ssl-redirect: "true"
+        nginx.ingress.kubernetes.io/proxy-body-size: "20m"
+      path: /
+      pathType: Prefix
+      hosts:
+        - grafana.yourdomain.com  # ❗ Замените на ваш домен
+      tls:
+        - secretName: grafana-tls
+          hosts:
+            - grafana.maltsevtech.com
+    service:
+      type: ClusterIP
+
+  # Убедитесь, что вы используете минимум GKE 1.21+ и NGINX Ingress Controller установлен
+  kubeApiServer:
+    enabled: true
+
+  nodeExporter:
+    enabled: true
+
+  kubeStateMetrics:
+    enabled: true
