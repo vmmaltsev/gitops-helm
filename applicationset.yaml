@@ -23,6 +23,11 @@ spec:
           skipCrds: true
       destination:
         server: https://kubernetes.default.svc
-        namespace: demo-app
+        namespace: '{{ if eq path.basename "monitoring" }}monitoring{{ else }}demo-app{{ end }}'
       syncPolicy:
-        automated: {}
+        automated:
+          prune: true
+          selfHeal: true
+        syncOptions:
+          - ServerSideApply=true
+          - CreateNamespace=true

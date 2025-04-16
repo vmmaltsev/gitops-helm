@@ -1,0 +1,30 @@
+grafana:
+  enabled: true
+  adminPassword: admin
+  service:
+    type: ClusterIP
+  ingress:
+    enabled: true
+    ingressClassName: nginx
+    hosts:
+      - grafana.maltsevtech.com
+    path: /
+    pathType: Prefix
+  persistence:
+    enabled: true
+    size: 2Gi
+    storageClassName: standard
+  defaultDashboardsEnabled: true
+
+prometheus:
+  service:
+    type: ClusterIP
+
+alertmanager:
+  enabled: true
+  service:
+    type: ClusterIP
+
+# Отключим создание CRD через Helm
+crds:
+  enabled: false
